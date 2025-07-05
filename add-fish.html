@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopShelf Aquatic - เพิ่มปลาใหม่</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .nav-link {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Prompt', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 40px 20px;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            background: #f8f9ff;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .file-upload-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .preview-area {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .preview-item video {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .current-fish {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .current-fish h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .fish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .fish-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .fish-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .fish-item h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .fish-item p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .delete-fish-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .fish-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-fish"></i> TopShelf Aquatic</h1>
+            <p>เพิ่มปลาบอลลูนใหม่</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> หน้าแรก</a>
+            <a href="/admin.html" class="nav-link"><i class="fas fa-shopping-cart"></i> จัดการคำสั่งซื้อ</a>
+            <a href="/add-fish.html" class="nav-link"><i class="fas fa-plus"></i> เพิ่มปลาใหม่</a>
+        </div>
+
+        <div class="current-fish" id="currentFishSection">
+            <h3><i class="fas fa-list"></i> ปลาที่มีอยู่ในระบบ</h3>
+            <div class="fish-grid" id="fishGrid">
+                <div style="text-align: center; padding: 20px; color: #7f8c8d;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>
+        </div>
+
+        <form id="addFishForm">
+            <div class="form-group">
+                <label for="fishName"><i class="fas fa-tag"></i> ชื่อปลา</label>
+                <input type="text" id="fishName" name="fishName" required placeholder="เช่น ปลาบอลลูนทอง">
+            </div>
+
+            <div class="form-group">
+                <label for="fishPrice"><i class="fas fa-money-bill-wave"></i> ราคา</label>
+                <input type="text" id="fishPrice" name="fishPrice" required placeholder="เช่น 750 บาท">
+            </div>
+
+            <div class="form-group">
+                <label for="fishDescription"><i class="fas fa-align-left"></i> รายละเอียด</label>
+                <textarea id="fishDescription" name="fishDescription" placeholder="อธิบายเกี่ยวกับปลา เช่น ขนาด สี ลักษณะพิเศษ"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="fishCategory"><i class="fas fa-folder"></i> หมวดหมู่</label>
+                <select id="fishCategory" name="fishCategory">
+                    <option value="premium">พรีเมี่ยม</option>
+                    <option value="standard">มาตรฐาน</option>
+                    <option value="rare">หายาก</option>
+                    <option value="new">ใหม่</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fishImage"><i class="fas fa-camera"></i> รูปภาพปลา</label>
+                <div class="file-upload">
+                    <div class="file-upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>คลิกเพื่อเลือกรูปภาพ</span>
+                    </div>
+                    <input type="file" id="fishImage" name="fishImage" accept="image/*" required>
+                </div>
+                <div id="imagePreview" class="preview-area"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="fishVideo"><i class="fas fa-video"></i> วิดีโอปลา (ไม่บังคับ)</label>
+                <div class="file-upload">
+                    <div class="file-upload-btn">
+                        <i class="fas fa-video"></i>
+                        <span>คลิกเพื่อเลือกวิดีโอ</span>
+                    </div>
+                    <input type="file" id="fishVideo" name="fishVideo" accept="video/*">
+                </div>
+                <div id="videoPreview" class="preview-area"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-plus-circle"></i> เพิ่มปลาใหม่
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let currentFish = [];
+
+        // Load existing fish on page load
+        document.addEventListener('DOMContentLoaded', loadExistingFish);
+
+        async function loadExistingFish() {
+            try {
+                // Load from API first, fallback to JSON file
+                try {
+                    const response = await fetch(`${API_BASE}/api/fish`);
+                    const fishData = await response.json();
+                    currentFish = fishData;
+                } catch (apiError) {
+                    // Fallback to local JSON file
+                    const response = await fetch('/fish-data.json');
+                    const fishData = await response.json();
+                    currentFish = fishData;
+                }
+                displayCurrentFish();
+            } catch (error) {
+                console.error('Error loading fish data:', error);
+                document.getElementById('fishGrid').innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>ไม่สามารถโหลดข้อมูลปลาได้</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayCurrentFish() {
+            const fishGrid = document.getElementById('fishGrid');
+            
+            if (!currentFish || currentFish.length === 0) {
+                fishGrid.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #7f8c8d;">
+                        <i class="fas fa-fish"></i>
+                        <p>ยังไม่มีปลาในระบบ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const fishHTML = currentFish.map((fish, index) => `
+                <div class="fish-item">
+                    <img src="${fish.image}" alt="${fish.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" fill=\"%23f0f0f0\"/><text x=\"50\" y=\"50\" text-anchor=\"middle\" dy=\".3em\" fill=\"%23999\">🐟</text></svg>'">
+                    <h4>${fish.title}</h4>
+                    <p><strong>ราคา:</strong> ${fish.price}</p>
+                    <p><strong>หมวดหมู่:</strong> ${fish.category || 'ไม่ระบุ'}</p>
+                    ${fish.description ? `<p><strong>รายละเอียด:</strong> ${fish.description.substring(0, 50)}${fish.description.length > 50 ? '...' : ''}</p>` : ''}
+                    ${fish.video ? '<p><i class="fas fa-video" style="color: #667eea;"></i> มีวิดีโอ</p>' : ''}
+                    <button class="delete-fish-btn" onclick="deleteFish(${index})">
+                        <i class="fas fa-trash"></i> ลบ
+                    </button>
+                </div>
+            `).join('');
+            
+            fishGrid.innerHTML = fishHTML;
+        }
+
+        async function deleteFish(index) {
+            if (!confirm('คุณแน่ใจหรือไม่ที่จะลบปลานี้?')) {
+                return;
+            }
+
+            try {
+                const fishToDelete = currentFish[index];
+                currentFish.splice(index, 1);
+                
+                // Re-assign IDs to maintain sequence
+                currentFish.forEach((fish, idx) => {
+                    fish.id = idx + 1;
+                });
+                
+                await saveFishData();
+                displayCurrentFish();
+                showNotification('ลบปลาสำเร็จ!', 'success');
+            } catch (error) {
+                console.error('Error deleting fish:', error);
+                showNotification('เกิดข้อผิดพลาดในการลบปลา', 'error');
+            }
+        }
+
+        // Handle image preview
+        document.getElementById('fishImage').addEventListener('change', function(e) {
+            handleFilePreview(e, 'imagePreview', 'image');
+        });
+
+        // Handle video preview
+        document.getElementById('fishVideo').addEventListener('change', function(e) {
+            handleFilePreview(e, 'videoPreview', 'video');
+        });
+
+        function handleFilePreview(event, previewId, type) {
+            const file = event.target.files[0];
+            const previewArea = document.getElementById(previewId);
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const element = type === 'image' ? 'img' : 'video';
+                    const controls = type === 'video' ? 'controls' : '';
+                    
+                    previewArea.innerHTML = `
+                        <div class="preview-item">
+                            <${element} src="${e.target.result}" ${controls}></${element}>
+                            <button type="button" class="preview-remove" onclick="removePreview('${previewId}', '${event.target.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePreview(previewId, inputId) {
+            document.getElementById(previewId).innerHTML = '';
+            document.getElementById(inputId).value = '';
+        }
+
+        // Handle form submission
+        document.getElementById('addFishForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังเพิ่มปลา...';
+
+            try {
+                const formData = new FormData(this);
+                await addNewFish(formData);
+                
+                // Reset form
+                this.reset();
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('videoPreview').innerHTML = '';
+                
+                showNotification('เพิ่มปลาใหม่สำเร็จ!', 'success');
+                await loadExistingFish();
+                
+            } catch (error) {
+                console.error('Error adding fish:', error);
+                showNotification('เกิดข้อผิดพลาดในการเพิ่มปลา', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+
+        async function addNewFish(formData) {
+            const fishName = formData.get('fishName');
+            const fishPrice = formData.get('fishPrice');
+            const fishDescription = formData.get('fishDescription');
+            const fishCategory = formData.get('fishCategory');
+            const fishImage = formData.get('fishImage');
+            const fishVideo = formData.get('fishVideo');
+
+            // Generate unique filename
+            const timestamp = Date.now();
+            const imageFileName = fishImage ? `fish_${timestamp}.${fishImage.name.split('.').pop()}` : null;
+            const videoFileName = fishVideo && fishVideo.size > 0 ? `video_${timestamp}.${fishVideo.name.split('.').pop()}` : null;
+
+            // Create new fish object
+            const newFish = {
+                id: currentFish.length + 1,
+                title: fishName,
+                price: fishPrice,
+                description: fishDescription || '',
+                category: fishCategory,
+                image: imageFileName ? `/images/${imageFileName}` : '/images/default-fish.svg',
+                video: videoFileName ? `/videos/${videoFileName}` : null,
+                lineUrl: "https://line.me/R/ti/p/@834wrclo"
+            };
+
+            // Add to current fish array
+            currentFish.push(newFish);
+
+            // Save to fish-data.json
+            await saveFishData();
+
+            // In a real implementation, you would upload the files to the server
+            // For now, we'll just simulate it
+            console.log('New fish added:', newFish);
+            console.log('Image file:', fishImage);
+            console.log('Video file:', fishVideo);
+        }
+
+        async function saveFishData() {
+            try {
+                const response = await fetch(`${API_BASE}/api/fish`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(currentFish)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save fish data to server');
+                }
+                
+                const result = await response.json();
+                console.log('Fish data saved successfully:', result);
+            } catch (error) {
+                console.error('Error saving fish data:', error);
+                throw error;
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
